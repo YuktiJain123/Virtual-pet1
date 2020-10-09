@@ -6,8 +6,8 @@ var foodStock;
 
 function preload()
 {
-  dog=loadImage("dogImg.png");
-  happyDog=loadImage("dogImg1.png");
+  dog=loadImage("images/dogImg.png");
+  happyDog=loadImage("images/dogImg1.png");
 }
 
 function setup() {
@@ -17,8 +17,9 @@ function setup() {
   foodStock=database.ref('Food');
   foodStock.on("value",readStock);
 
-  PetDog=createSprite(200,100,50,50);
-  PetDog.addImage("dog",dog);
+  PetDog=createSprite(300,300,10,10);
+  PetDog.addImage(dog);
+  PetDog.scale=0.2;
 }
 //Function to read values from DB
 function readStock(data){
@@ -26,6 +27,11 @@ function readStock(data){
 }
 //Fuction to write value in DB
 function writeStock(x){
+  if (x<=0){
+    x=0;
+  }else{
+    x=x-1;
+  }
   database.ref('/').update({
     Food:x
   })
@@ -35,11 +41,13 @@ function draw() {
 background(46, 139, 87);
 if(keyWentDown(UP_ARROW)){
   writeStock(foodS);
-  dog.addImage(happyDog);
+  PetDog.addImage(happyDog);
 }
   drawSprites();
-  //add styles here
-
+  fill("White");
+  textSize(20);
+  text("NOTE:press UP ARROW key to feed Drago milk",50,30);
+  text("food remaining:"+foodS,200,200);
 }
 
 
